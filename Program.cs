@@ -343,9 +343,15 @@ namespace sceWork
             //Convert UTF-8 to SJIS, as it's easier to detect kanjis in SJIS
             byte[] temp;
             if (!useSJIS)
-                temp = Encoding.Convert(Encoding.UTF8, SJIS, File.ReadAllBytes(path));
+            {
+                Console.WriteLine("Mapping Hangul characters to SJIS Kanji...");
+                temp = Encoding.UTF8.GetBytes(HangulMapper.HangulToKanji(File.ReadAllText(path, Encoding.UTF8)));
+                temp = Encoding.Convert(Encoding.UTF8, SJIS, temp);
+            }
             else
+            {
                 temp = File.ReadAllBytes(path);
+            }
             string[] stringSeparators = new string[] { "\r\n" };
             string[] strArray = SJIS.GetString(temp).Split(stringSeparators, StringSplitOptions.None);
 
