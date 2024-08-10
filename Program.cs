@@ -25,6 +25,7 @@ namespace sceWork
 
         private static void Main(string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Console.WriteLine("TOD1RSCE sceWork v0.9 - Cross-Platform");
             string exeDir = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             exeDir = new Uri(exeDir).LocalPath;
