@@ -352,8 +352,16 @@ namespace sceWork
             {
                 temp = File.ReadAllBytes(path);
             }
+
+            var sjisString = SJIS.GetString(temp);
+            if (!sjisString.Contains("\r\n"))
+            {
+                // maybe the file's line encoding is not CRLF. so convert it to CRLF
+                sjisString = sjisString.Replace("\n", "\r\n");
+            }
+
             string[] stringSeparators = new string[] { "\r\n" };
-            string[] strArray = SJIS.GetString(temp).Split(stringSeparators, StringSplitOptions.None);
+            string[] strArray = sjisString.Split(stringSeparators, StringSplitOptions.None);
 
             //Can't ignore empty lines with the split (some lines might be blank in the source file)
             //but the last line can't be blank, so handle that here
