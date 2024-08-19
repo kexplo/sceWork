@@ -280,7 +280,11 @@ namespace sceWork
 
             }
 
-            return str1 + "00";
+            if (str1.Length > 0)
+            {
+                return str1 + "00";
+            }
+            else return "";
         }
     }
 }
