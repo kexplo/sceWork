@@ -383,11 +383,6 @@ namespace sceWork
 
                 if (strArray[index].StartsWith("[ENDBLOCK]"))
                 {
-                    if (str.Length == 0)
-                    {
-                        MiscUtils.Warn(string.Format("Block {0} length is 0", index));
-                    }
-
                     lineNumberList.Add(lineNumber - blockLine);
                     blockLine = 0;
                     stringList.Add(str);
