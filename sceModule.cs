@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace sceWork
 {
@@ -35,16 +36,79 @@ namespace sceWork
 
         public void SetBlock(int idx, byte[] data)
         {
+            bool isEmpty = this.header.fileStrings[idx].data.Count == 0;
+
+            // do not add extra data if the block is empty
+            if (isEmpty)
+            {
+                return;
+            }
+
+            int trailingNullCount = CountTrailingNulls(this.header.fileStrings[idx].data.ToArray());
+
             this.header.fileStrings[idx].data.Clear();
+
+            int trailingNullCountData = CountTrailingNulls(data);
+            int trailingNullDelta = trailingNullCount - trailingNullCountData;
+
+            if (trailingNullDelta < 0)
+            {
+                data = data.Take(data.Length + trailingNullDelta).ToArray();
+            }
+            else if (trailingNullDelta > 0)
+            {
+                data = data.Concat(Enumerable.Repeat((byte)0x00, trailingNullDelta)).ToArray();
+            }
+
             for (int index = 0; index < data.Length; ++index)
                 this.header.fileStrings[idx].data.Add(data[index]);
         }
 
+        private static int CountTrailingNulls(byte[] data)
+        {
+            int traiingNullCount = 0;
+            for (int i = data.Length - 1; i >= 0; i--)
+            {
+                if (data[i] == 0x00)
+                {
+                    traiingNullCount++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return traiingNullCount;
+        }
+
         public void SetBlock(int idx, byte[] data, List<string> plainStringList, List<int> lineNumberList)
         {
+            bool isEmpty = this.header.fileStrings[idx].data.Count == 0;
+
             header.lineNumberList = lineNumberList;
             header.plainStringList = plainStringList;
+            // do not add extra data if the block is empty
+            if (isEmpty)
+            {
+                return;
+            }
+
+            int trailingNullCount = CountTrailingNulls(this.header.fileStrings[idx].data.ToArray());
+
             this.header.fileStrings[idx].data.Clear();
+
+            int trailingNullCountData = CountTrailingNulls(data);
+            int trailingNullDelta = trailingNullCount - trailingNullCountData;
+
+            if (trailingNullDelta < 0)
+            {
+                data = data.Take(data.Length + trailingNullDelta).ToArray();
+            }
+            else if (trailingNullDelta > 0)
+            {
+                data = data.Concat(Enumerable.Repeat((byte)0x00, trailingNullDelta)).ToArray();
+            }
+
             for (int index = 0; index < data.Length; ++index)
                 this.header.fileStrings[idx].data.Add(data[index]);
         }
