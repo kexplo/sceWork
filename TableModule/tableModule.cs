@@ -127,7 +127,7 @@ namespace sceWork
             {
                 //Canonical byte ranges for character are 0x9940 - 0x9FFF and then 0xE000 - 0xEC5F
                 //The ranges 0xA000-0xDFFF are technically correct too, so there are duplicates
-                if ((byteArr[index] >= 0x99 && (byteArr[index] < 0xA0) || byteArr[index] >= 0xE0) && index + 2 <= byteArr.Length)
+                if ((byteArr[index] >= 0x99 && (byteArr[index] < 0xA0) || byteArr[index] >= 0xE0 && byteArr[index] <= 0xEC) && index + 2 <= byteArr.Length)
                 {
                     string str2 = BitConverter.ToString(byteArr, index, 2).Replace("-", string.Empty);
 
