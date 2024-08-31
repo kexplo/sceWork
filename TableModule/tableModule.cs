@@ -132,14 +132,22 @@ namespace sceWork
                     string str2 = BitConverter.ToString(byteArr, index, 2).Replace("-", string.Empty);
 
                     int index2 = 0;
+                    bool found = false;
                     while (index2 < entry.Count)
                     {
                         if (entry[index2].A.Equals(str2))
                         {
                             str1 += entry[index2].B;
+                            found = true;
                             break;
                         }
                         index2++;
+                    }
+
+                    if (!found)
+                    {
+                        MiscUtils.Err("Could not find a match for " + str2 + " in the JPCODES.txt file.");
+                        str1 += str2;
                     }
 
                     index++;
