@@ -487,7 +487,7 @@ namespace sceWork
 
         private static byte HexToByte(char s)
         {
-            switch (s)
+            switch (char.ToUpper(s))
             {
                 case '0':
                     return 0;
